@@ -1,0 +1,249 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Home</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="../static/assets/css/main.css"/>
+    <style>
+
+        .item div {
+			border-top-left-radius: 4px;
+			border-top-right-radius: 4px;
+			margin: -3em 0 3em -3em;
+			/*width: calc(100% + 6em);*/
+			height: 20em;
+			display: -moz-flex;
+			display: -webkit-flex;
+			display: -ms-flex;
+			display: flex;
+			-moz-align-items: center;
+			-webkit-align-items: center;
+			-ms-align-items: center;
+			align-items: center;
+			-moz-justify-content: center;
+			-webkit-justify-content: center;
+			-ms-justify-content: center;
+			justify-content: center;
+			background-color: #444;
+			color: rgba(255, 255, 255, 0.75);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.item1 div {
+			border-top-left-radius: 4px;
+			border-top-right-radius: 4px;
+			margin: -3em -30em 3em -3em;
+			/*width: calc(100% + 6em);*/
+			width:70em;
+			height: 30em;
+			display: -moz-flex;
+			display: -webkit-flex;
+			display: -ms-flex;
+			display: flex;
+			-moz-align-items: center;
+			-webkit-align-items: center;
+			-ms-align-items: center;
+			align-items: center;
+			-moz-justify-content: center;
+			-webkit-justify-content: center;
+			-ms-justify-content: center;
+			justify-content: center;
+			background-color: #444;
+			color: rgba(255, 255, 255, 0.75);
+			position: relative;
+			overflow: hidden;
+		}
+    </style>
+</head>
+<body>
+
+
+<section id="intro" class="main">
+    <h2>Mask Detection</h2>
+</section>
+
+
+<div id="wrapper">
+    <section class="main items">
+        <article class="item">
+            <div style="top: 6%;left: 6%;"><img id="oraimg" src="" style="width: 28em" alt=""/></div>
+            <input type="file" name="myfile" id="myfile" onchange="upload()" style="display:none;">
+
+            <ul class="actions">
+                <li><a href="#" class="button" id="upload" onclick="selectFile()">上传</a></li>
+            </ul>
+
+        </article>
+
+        <article class="item">
+            <div style="top: 6%;left: 6%;"><img id="preimg" src="" style="width: 28em" alt=""/></div>
+            <ul class="actions">
+                <li><a href="#" class="button" onclick="predict()">预测</a></li>
+            </ul>
+        </article>
+
+
+
+    </section>
+
+    <footer id="footer1">
+         <ul class="icons">
+            <li></li>
+        </ul>
+    </footer>
+
+
+    <section class="main items">
+
+        <article class="item1">
+
+            <div  style="top: 6%;left: 6%;background:white;" >
+                <img id="preVideo" src="{{ url_for('video_feed') }}" >
+
+            </div>
+            <ul class="actions" style="position:relative;left:78%;top:10px;">
+                <li>
+                    <a href="#" class="button" onclick="predictvideo()">视频</a>
+                </li>
+            </ul>
+        </article>
+
+    </section>
+
+
+    <footer id="footer">
+        <ul class="icons">
+            <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+            <li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+            <li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+            <li><a href="#" class="icon fa-linkedin"><span class="label">LinkedIn</span></a></li>
+            <li><a href="#" class="icon fa-envelope"><span class="label">Email</span></a></li>
+        </ul>
+         <p class="copyright">
+             Copyright &copy; WHUT SREE GIS322.
+        </p>
+    </footer>
+
+</div>
+
+<script src="../static/assets/js/jquery.min.js"></script>
+<script src="../static/assets/js/skel.min.js"></script>
+<script src="../static/assets/js/util.js"></script>
+<script src="../static/assets/js/main.js"></script>
+<script src="../static/js/jquery-2.2.0.min.js"></script>
+<script src="../static/js/common.js"></script>
+<script src="../static/js/comprehensive.js"></script>
+<script>
+    var src= "111"
+    function selectFile(){
+        $("#myfile").trigger("click");
+
+    }
+    function upload(){
+               var fileObj = document.getElementById("myfile").files[0]; // js 获取文件对象
+               var formFile = new FormData();
+               formFile.append("action", "UploadVMKImagePath");
+               formFile.append("file", fileObj); //加入文件对象
+               //第二种 ajax 提交
+               var data = formFile;
+               $.ajax({
+                   url: "http://127.0.0.1:5000/upload",
+                   data: data,
+                   type: "Post",
+                   dataType: "json",
+                   cache: false,//上传文件无需缓存
+                   processData: false,//用于对data参数进行序列化处理 这里必须false
+                   contentType: false, //必须
+               }).then(function (res){
+                   src=res.oraImg
+
+                   var id='oraimg'
+                   showImg(src,id)
+                   // alert("Predict Completed ! clik to show result")
+
+                })
+
+}
+
+    function predict(){
+               var id='preimg'
+                showImg("../static/loading.gif",id)
+               var data = '';
+               $.ajax({
+                   url: "http://127.0.0.1:5000/predict",
+                   data: data,
+                   type: "Post",
+                   dataType: "json",
+                   cache: false,//上传文件无需缓存
+                   processData: false,//用于对data参数进行序列化处理 这里必须false
+                   contentType: false, //必须
+               }).then(function (res){
+                   var src=res.preImg
+                   var id='preimg'
+                   showImg(src,id)
+                })
+}
+    function showImg(src,id){
+        document.getElementById(id).src=src
+    }
+
+    var count=0
+
+    function task1 () {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      document.getElementById('preVideo').src="{{ url_for('video_feed1') }}";
+      resolve('done');
+    }, 50);
+  });
+}
+    function task2 () {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      document.getElementById('preVideo').src="{{ url_for('video_feed') }}";
+      resolve('done');
+    }, 50);
+  });
+}
+    async function allTasks2orange () {
+        
+          await task1();
+          //alert('是否停止检测？')
+          document.getElementById('preVideo').src="../static/withmask.gif";
+
+          await task2();
+          // alert('已停止检测')
+
+}
+    async function allTasks2predict () {
+
+
+
+        await task2();
+        //alert('是否开始检测？')
+        document.getElementById('preVideo').src="../static/nomask.gif";
+
+
+          await task1();
+        // alert('目标检测开始')
+
+
+}
+    function predictvideo(){
+        count+=1
+        if (count%2==1){
+        allTasks2predict()
+        }
+
+        else{
+            allTasks2orange()
+        }
+
+
+    }
+   </script>
+
+</body>
+</html>
