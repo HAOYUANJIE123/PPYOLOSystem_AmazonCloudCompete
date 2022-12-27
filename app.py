@@ -21,8 +21,11 @@ def main_UI():
 needPredic = False
 imgFile = ''
 fileName = ''
-session_img = onnxruntime.InferenceSession('static/ppyolov2.onnx')
-session_video = onnxruntime.InferenceSession('static/ppyolo_tiny.onnx')
+basepath = os.path.dirname(__file__)  # 当前文件所在路径
+modepath='static/ppyolo_tiny.onnx'
+# session_img = onnxruntime.InferenceSession('static/ppyolov2.onnx')
+session_img = onnxruntime.InferenceSession(modepath)
+session_video = onnxruntime.InferenceSession(modepath)
 
 @app.route('/upload', methods=['POST', 'GET'])
 def upload():
@@ -115,4 +118,4 @@ def predictVideoImg(singleImg):
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

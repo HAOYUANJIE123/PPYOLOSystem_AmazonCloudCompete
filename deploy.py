@@ -13,7 +13,7 @@ id2label = {
 }
 warnings.filterwarnings("ignore")
 
-image_shape=(640, 640)
+image_shape=(320, 320)
 video_shape = (320, 320)
 mean=(0.485, 0.456, 0.406)
 std=(0.229, 0.224, 0.225)
